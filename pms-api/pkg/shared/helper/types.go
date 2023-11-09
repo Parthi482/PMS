@@ -98,6 +98,7 @@ type DataSetConfiguration struct {
 	Filter                      []FilterCondition       `json:"Filter,omitempty" bson:"Filter,omitempty"`
 	DataSetBaseCollectionFilter []FilterCondition       `json:"dataSetBaseCollectionFilter,omitempty, bson:"dataSetBaseCollectionFilter,omitempty"`
 	Pipeline                    string                  `json:"pipeline,omitempty" bson:"pipeline,omitempty"`
+	Reference_pipeline          string                  `json:"Reference_pipeline,omitempty" bson:"Reference_pipeline,omitempty"`
 	Start                       int                     `json:"start,omitempty" bson:"start,omitempty"`
 	End                         int                     `json:"end,omitempty" bson:"end,omitempty"`
 }

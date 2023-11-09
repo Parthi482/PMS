@@ -172,7 +172,6 @@ func Updateformodel(c *fiber.Ctx) error {
 		return shared.BadRequest("Organization Id missing")
 	}
 
-	// fmt.Println("Insert The Collections")
 	collectionName := c.Params("collectionName")
 
 	// If the ID is not a valid ObjectID, search using the ID as a string
@@ -339,7 +338,7 @@ func GenerateAggregationPipeline(condition ConditionGroup, basecollection string
 			conditions = append(conditions, bson.M{column: bson.M{operator: value.([]interface{})}})
 
 		} else {
-			fmt.Println(conditionValue)
+
 			conditions = append(conditions, bson.M{column: bson.M{operator: conditionValue}})
 		}
 	}
@@ -384,9 +383,8 @@ func PagiantionPipeline(start, end int) bson.M {
 }
 
 // ConvertToDataType --METHOD Build the Datatype from Paramters
-func ConvertToDataType(value interface{}, dataType string) interface{} {
-	switch dataType {
-	case "date", "time.Time":
+func ConvertToDataType(value interface{}, DataType string) interface{} {
+	if DataType == "time.Time" || DataType == "date" {
 		if valStr, ok := value.(string); ok {
 			t, err := time.Parse(time.RFC3339, valStr)
 			if err == nil {
@@ -394,7 +392,8 @@ func ConvertToDataType(value interface{}, dataType string) interface{} {
 				return StartedDay
 			}
 		}
-	case "string", "text":
+	} else if DataType == "string" || DataType == "text" {
+
 		if valStr, ok := value.(string); ok {
 			t, err := time.Parse(time.RFC3339, valStr)
 			//if err is nil that time only convert the string to time.Time format
@@ -406,12 +405,13 @@ func ConvertToDataType(value interface{}, dataType string) interface{} {
 				return valStr
 			}
 		}
+	} else if DataType == "boolean" || DataType == "bool" {
 
-	case "boolean", "bool":
 		if boolValue, ok := value.(bool); ok {
 			return boolValue
 		}
 	}
+
 	return value
 }
 
