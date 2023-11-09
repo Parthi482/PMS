@@ -21,14 +21,14 @@ func SetupAllRoutes(app *fiber.App) {
 func SetupCRUDRoutes(app *fiber.App) {
 	r := helper.CreateRouteGroup(app, "/entities/", "REST API")
 	r.Post("/:model_name", PostDocHandler)
-	r.Put("/:collectionName/:id?/:model_ref_id?/:role?", putDocByIDHandlers)
+	r.Put("/:collectionName/:id?/", putDocByIDHandlers)
 	r.Get("/:collectionName/:id", GetDocByIdHandler)
 	r.Delete("/:collectionName/:id", DeleteById)
 	r.Delete("/:collectionName", DeleteByAll)
-	r.Post("/filter/:collectionName/:org_id?", getDocsHandler)
-	r.Get("/clients/:name", ActiveClientHandler)                          //todo
-	r.Get("filter/:collectionName/:projectid", getDocByIddHandler)        //todod
-	r.Get("filters/:collectionName/:clientname", getDocByClientIdHandler) //todo
+	r.Post("/filter/:collectionName", getDocsHandler)
+	// r.Get("/clients/:name", ActiveClientHandler)                          //todo
+	// r.Get("filter/:collectionName/:projectid", getDocByIddHandler)        //todod
+	// r.Get("filters/:collectionName/:clientname", getDocByClientIdHandler) //todo
 	// r.Post("/:collectionName/increment/columnName/value", updateIncrementalValue)
 }
 
@@ -49,17 +49,12 @@ func SetupDatasets(app *fiber.App) {
 	r.Post("/data/:datasetname", helper.DatasetsRetrieve)
 	r.Put("/:datasetname", helper.UpdateDataset)
 }
-
 func SetupBulkUploadRoutes(app *fiber.App) {
 	r := helper.CreateRouteGroup(app, "/upload_bulk", "Bulk Api")
 	r.Get("/", helper.UploadbulkData)
 }
 
-func SetupSearchRoutes(app *fiber.App) {
-	r := helper.CreateRouteGroup(app, "/search", "Search API")
-	r.Post("/:collectionName/:page/:limit?", searchDocsHandler)
-	r.Post("/:parent_collection/:key_column/:child_collection/:lookup_column", searchEntityWithChildCountHandler)
-}
+
 
 // todo remove
 func SetupQueryRoutes(app *fiber.App) {
@@ -98,7 +93,6 @@ func SetupDownloadRoutes(app *fiber.App) {
 	//without JWT Token validation (without auth)
 	r := helper.CreateRouteGroup(app, "/file", "Upload APIs")
 	r.Post("/:folder/:refId", helper.FileUpload)
-
 	r.Get("/all/:category/:status/:page?/:limit?", getAllFileDetails)
 	r.Get("/:category/:refId", getFileDetails)
 	// r.Get("/:category/:refId/:fileName", fileDownload)
@@ -106,7 +100,7 @@ func SetupDownloadRoutes(app *fiber.App) {
 
 func SetupSharedDBRoutes(app *fiber.App) {
 	r := helper.CreateRouteGroup(app, "/shared", "Shared DB API")
-	r.Get("/:collectionName", sharedDBEntityHandler)
+	// r.Get("/:collectionName", sharedDBEntityHandler)
 	r.Post("/:teamid", TeamRoleHandler) //todo pending
 }
 
