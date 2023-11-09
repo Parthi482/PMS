@@ -245,7 +245,7 @@ func getDocByIddHandler(c *fiber.Ctx) error {
 	projectid := c.Params("projectid")
 
 	filter := bson.A{
-		bson.D{{"$match", bson.D{{"projectid", projectid}}}},
+		bson.D{{"$match", bson.D{{"project_id", projectid}}}},
 		bson.D{
 			{"$lookup",
 				bson.D{
@@ -265,7 +265,7 @@ func getDocByIddHandler(c *fiber.Ctx) error {
 					{"parentmodulename", 1},
 					{"modulename", 1},
 					{"enddate", 1},
-					{"projectid", 1},
+					{"project_id", 1},
 					{"startdate", 1},
 					{"taskname", "$results.taskname"},
 				},
