@@ -27,22 +27,24 @@ func SetupCRUDRoutes(app *fiber.App) {
 	r.Delete("/:collectionName", DeleteByAll)
 	r.Post("/filter/:collectionName", getDocsHandler)
 	// r.Get("/clients/:name", ActiveClientHandler)                          //todo
-	r.Get("filter/:collectionName/:projectid", getDocByIddHandler)        //todod
+	r.Get("filter/:collectionName/:projectid", getDocByIddHandler) //todod
 	// r.Get("filters/:collectionName/:clientname", getDocByClientIdHandler) //todo
 	// r.Post("/:collectionName/increment/columnName/value", updateIncrementalValue)
 }
 
+// temp
 func Setuptokenfree(app *fiber.App) {
 	r := app.Group("/user/")
 	r.Post("/register", UserRegister)
 }
 
-// func SetupGroupRoutes(app *fiber.App) {
-// 	r := helper.CreateRouteGroup(app, "/group", "Data Lookup API")
-// 	r.Get("/:groupname", helper.GroupDataBasedOnRules)
-// 	r.Get("/testing/:modelName", helper.Testing)
-// }
-
+//	func SetupGroupRoutes(app *fiber.App) {
+//		r := helper.CreateRouteGroup(app, "/group", "Data Lookup API")
+//		r.Get("/:groupname", helper.GroupDataBasedOnRules)
+//		r.Get("/testing/:modelName", helper.Testing)
+//	}
+//
+// Data set
 func SetupDatasets(app *fiber.App) {
 	r := helper.CreateRouteGroup(app, "/dataset", "Data Sets")
 	r.Post("/config/:options?", helper.DatasetsConfig)

@@ -335,11 +335,12 @@ func BuildPipeline(orgId string, inputData DataSetConfiguration) (DataSetConfigu
 		Pipeline = append(Pipeline, filterPipelines)
 
 	}
-
+	//Project the pipeline
 	if len(inputData.SelectedList) > 0 {
 		selectedColumns := CreateSelectedColumn(inputData.SelectedList, inputData.DataSetBaseCollection)
 		Pipeline = append(Pipeline, selectedColumns...)
 	}
+
 	// filter pipeline convert the byte
 	marshaldata, err := json.Marshal(Pipeline)
 	if err != nil {
@@ -351,6 +352,7 @@ func BuildPipeline(orgId string, inputData DataSetConfiguration) (DataSetConfigu
 	inputData.Pipeline = pipelinestring
 	// Set the DatasetName to _id for unique
 	inputData.Id = inputData.DataSetName
+
 	// Filter Params for to replace the string to convert to pipeline again
 	if len(inputData.FilterParams) > 0 {
 		pipelinestring := createFilterParams(inputData.FilterParams, pipelinestring)
