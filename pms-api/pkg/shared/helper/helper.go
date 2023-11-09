@@ -222,10 +222,7 @@ func MasterAggregationPipeline(request PaginationRequest, c *fiber.Ctx) []bson.M
 	Pipeline := []bson.M{}
 
 	if len(request.Filter) > 0 {
-		FilterConditions, err := BuildAggregationPipeline(request.Filter, "")
-		if err != nil {
-			shared.BadRequest("Invalid operator")
-		}
+		FilterConditions := BuildAggregationPipeline(request.Filter, "")
 		Pipeline = append(Pipeline, FilterConditions)
 	}
 
@@ -234,28 +231,6 @@ func MasterAggregationPipeline(request PaginationRequest, c *fiber.Ctx) []bson.M
 		Pipeline = append(Pipeline, sortConditions)
 	}
 
-	if request.Start == 0 && request.End == 0 {
-		request.Start = 0
-		request.End = 5000
-	}
-
-	pagination := bson.M{
-		"$facet": bson.D{
-			{"response",
-				bson.A{
-					bson.D{{"$skip", request.Start}},
-					bson.D{{"$limit", request.End - request.Start}},
-				},
-			},
-			{"pagination",
-				bson.A{
-					bson.D{{"$count", "totalDocs"}},
-				},
-			},
-		},
-	}
-
-	Pipeline = append(Pipeline, pagination)
 	return Pipeline
 }
 
@@ -462,36 +437,33 @@ func DatasetsRetrieve(c *fiber.Ctx) error {
 	return shared.SuccessResponse(c, Response)
 }
 
+// UpdateDataset  --METHOD Update the Dataset_config collection to store the data with pipeline
 func UpdateDataset(c *fiber.Ctx) error {
 	orgId := c.Get("OrgId")
 	if orgId == "" {
 		return shared.BadRequest("Organization Id missing")
 	}
 	datasetname := c.Params("datasetname")
-
+	//Params
 	filter := bson.M{"dataSetName": datasetname}
-
+	//Update body to bind the  DataSetConfiguration
 	var inputData DataSetConfiguration
 	if err := c.BodyParser(&inputData); err != nil {
-
 		return shared.BadRequest("Invalid Body Content")
 	}
-
+	// Global Variable set the For response
 	var Response fiber.Map
+	//Build the Pipeline
+	Data, Response := BuildPipeline(orgId, inputData)
 
-	Data, Response, err := BuildPipeline(orgId, inputData)
-	if err != nil {
-		return shared.InternalServerError("err.Error()")
-	}
-
-	Response, err = UpdateDatasetConfig(orgId, filter, Data)
+	Response, err := UpdateDataToDb(orgId, filter, Data, "dataset_config")
 	if err != nil {
 		return shared.BadRequest("Failed to insert data into the database")
 
 	}
-	return c.JSON(Response)
-}
 
+	return shared.SuccessResponse(c, Response)
+}
 func UpdateDatasetConfig(orgId string, filter interface{}, inputData DataSetConfiguration) (fiber.Map, error) {
 	res, err := database.GetConnection(orgId).Collection("dataset_config").UpdateOne(ctx, filter, inputData)
 	if err != nil {
