@@ -352,7 +352,7 @@ func BuildPipeline(orgId string, inputData DataSetConfiguration) (DataSetConfigu
 	inputData.Pipeline = pipelinestring
 	// Set the DatasetName to _id for unique
 	inputData.Id = inputData.DataSetName
-
+ //
 	// Filter Params for to replace the string to convert to pipeline again
 	if len(inputData.FilterParams) > 0 {
 		pipelinestring := createFilterParams(inputData.FilterParams, pipelinestring)
