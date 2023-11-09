@@ -1528,23 +1528,23 @@ func sendSimpleEmailHandler(c *fiber.Ctx) error {
 	return shared.BadRequest("Try again")
 }
  
-// // Search EntitiesHandler - Get Entities
-func DataLookupDocsHandler(c *fiber.Ctx) error {
-	orgId := c.Get("OrgId")
-	if orgId == "" {
-		return shared.BadRequest("Organization Id missing")
-	}
-	var lookupQuery helper.LookupQuery
-	err := c.BodyParser(&lookupQuery)
-	if err != nil {
-		return shared.BadRequest(err.Error())
-	}
-	response, err := helper.ExecuteLookupQuery(orgId, lookupQuery)
-	if err != nil {
-		return shared.BadRequest(err.Error())
-	}
-	return shared.SuccessResponse(c, response)
-}
+// // // Search EntitiesHandler - Get Entities
+// func DataLookupDocsHandler(c *fiber.Ctx) error {
+// 	orgId := c.Get("OrgId")
+// 	if orgId == "" {
+// 		return shared.BadRequest("Organization Id missing")
+// 	}
+// 	var lookupQuery helper.LookupQuery
+// 	err := c.BodyParser(&lookupQuery)
+// 	if err != nil {
+// 		return shared.BadRequest(err.Error())
+// 	}
+// 	response, err := helper.ExecuteLookupQuery(orgId, lookupQuery)
+// 	if err != nil {
+// 		return shared.BadRequest(err.Error())
+// 	}
+// 	return shared.SuccessResponse(c, response)
+// }
  
 func getNextSeqNumberHandler(c *fiber.Ctx) error {
 	orgId := c.Get("OrgId")
